@@ -11,4 +11,6 @@ set -ouex pipefail
 # systemctl enable podman.socket
 
 ### OS identity (shown in "About" and fastfetch)
-# sed -i 's/^NAME=.*/NAME="Gaming OS"/' /usr/lib/os-release
+OS_NAME="Nocturne"
+sed -i "s/^NAME=.*/NAME=\"${OS_NAME}\"/" /usr/lib/os-release
+sed -i "s/^PRETTY_NAME=.*/PRETTY_NAME=\"${OS_NAME} (based on Bazzite)\"/" /usr/lib/os-release
