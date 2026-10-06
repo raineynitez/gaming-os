@@ -19,6 +19,17 @@ jobs:
       contents: read
       packages: write
     steps:
+      - name: Free up runner disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo docker image prune --all --force || true
+          # Put rootless container storage on the larger /mnt volume
+          sudo mkdir -p /mnt/containers
+          sudo chown "$USER" /mnt/containers
+          mkdir -p "$HOME/.local/share/containers"
+          sudo mount --bind /mnt/containers "$HOME/.local/share/containers"
+          df -h / /mnt
+
       - uses: actions/checkout@v4
 
       - name: Build image
