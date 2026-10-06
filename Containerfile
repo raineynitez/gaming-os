@@ -15,6 +15,9 @@ COPY system_files /system_files
 
 FROM ${BASE_IMAGE}:${BASE_TAG}
 
+LABEL org.opencontainers.image.source="https://github.com/raineynitez/gaming-os"
+LABEL org.opencontainers.image.description="Nocturne: a midnight-purple gaming OS based on Bazzite"
+
 # Overlay static files onto the root filesystem
 COPY system_files/ /
 

@@ -1,0 +1,43 @@
+name: Build installer ISO
+
+# Manual: the ISO embeds the whole OS image (many GB), so don't build it on every push.
+on:
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/raineynitez/gaming-os:latest
+
+jobs:
+  iso:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Free up runner disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo docker image prune --all --force || true
+          df -h /
+
+      - uses: actions/checkout@v4
+
+      # bootc-image-builder reads the image from root's container storage
+      - name: Pull image
+        run: sudo podman pull "$IMAGE"
+
+      - name: Build ISO
+        id: bib
+        uses: osbuild/bootc-image-builder-action@main
+        with:
+          config-file: ./disk_config/iso.toml
+          image: ${{ env.IMAGE }}
+          types: anaconda-iso
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: nocturne-iso
+          path: ${{ steps.bib.outputs.output-directory }}/bootiso/install.iso
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7

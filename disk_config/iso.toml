@@ -1,0 +1,22 @@
+# bootc-image-builder config for the Nocturne installer ISO.
+# After install, point the system at the registry so it receives updates.
+[customizations.installer.kickstart]
+contents = """
+%post --erroronfail
+bootc switch --mutate-in-place --transport registry ghcr.io/raineynitez/gaming-os:latest
+%end
+"""
+
+[customizations.installer.modules]
+# Show the storage step; users/network are configured on first boot by Bazzite.
+enable = [
+  "org.fedoraproject.Anaconda.Modules.Storage",
+]
+disable = [
+  "org.fedoraproject.Anaconda.Modules.Network",
+  "org.fedoraproject.Anaconda.Modules.Security",
+  "org.fedoraproject.Anaconda.Modules.Services",
+  "org.fedoraproject.Anaconda.Modules.Users",
+  "org.fedoraproject.Anaconda.Modules.Subscription",
+  "org.fedoraproject.Anaconda.Modules.Timezone",
+]
