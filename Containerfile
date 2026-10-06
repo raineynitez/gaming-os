@@ -1,10 +1,11 @@
 # Base image: Bazzite (Fedora Atomic + gaming stack).
 # Variants (swap the tag name to change hardware target):
-#   bazzite            - AMD/Intel desktop (KDE)
-#   bazzite-nvidia     - NVIDIA desktop
-#   bazzite-deck       - boots into the Steam gaming-mode session (handheld / living-room PC)
+#   bazzite              - AMD/Intel desktop (KDE)
+#   bazzite-nvidia       - NVIDIA (older GTX cards)
+#   bazzite-nvidia-open  - NVIDIA open kernel modules (RTX 20-series and newer; required for RTX 50 / Blackwell)
+#   bazzite-deck         - boots into the Steam gaming-mode session (handheld / living-room PC)
 # See https://github.com/ublue-os/bazzite#image-variants
-ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite"
+ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite-nvidia-open"
 ARG BASE_TAG="stable"
 
 # Files copied into the image as-is (branding, configs, systemd units, ...)
