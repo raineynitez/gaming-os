@@ -14,3 +14,9 @@ set -ouex pipefail
 OS_NAME="Nocturne"
 sed -i "s/^NAME=.*/NAME=\"${OS_NAME}\"/" /usr/lib/os-release
 sed -i "s/^PRETTY_NAME=.*/PRETTY_NAME=\"${OS_NAME} (based on Bazzite)\"/" /usr/lib/os-release
+
+### Disable repos whose GPG keys aren't available to bootc-image-builder
+### (otherwise the installer ISO build fails at dependency resolution)
+for f in $(grep -l '^\[terra-mesa\]' /etc/yum.repos.d/*.repo 2>/dev/null || true); do
+  sed -i '/^\[terra-mesa\]/,/^\[/ s/^enabled=1/enabled=0/' "$f"
+done
